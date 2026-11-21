@@ -49,10 +49,26 @@ def build(source, destination):
             uri = base64.b64encode(data).decode("ascii")
             cards.append(f'<article><img alt="" src="data:image/png;base64,{uri}"><b>{html.escape(name)}</b><small>{html.escape(city)}</small></article>')
     league = "br-serie-b"
+    # América's opening 2026 training roster, published by the club.
+    # https://www.americafc.com.br/elenco-do-america-se-reapresenta-para-a-temporada-2026
+    roster = {
+        "Goalkeeper": ["Gustavo", "Cássio", "William", "Lecce"],
+        "Defender": ["Maguinho", "Samuel Alves", "Paulinho", "Artur"],
+        "CenterBack": ["Emerson", "Rafa Barcelos", "Ricardo Silva"],
+        "Midfielder": ["Felipe Amaral", "Alê", "Yago Souza", "Yago Santos", "Elizari", "Eduardo Person", "Thauan"],
+        "Forward": ["Willian Dubgod", "Paulo Victor", "Everton Brito", "Jhonatan Lima"],
+    }
+    import unicodedata
+    players = []
+    for position, names in roster.items():
+        for name in names:
+            slug = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower().replace(" ", "-")
+            players.append(dict(id="america-mg-" + slug, name=name, club="america-mineiro", position=position))
     documents = {
+        "players/players.json": dict(schema="player", items=players),
         "package.json": dict(schema="world", id="br-serie-b-demo", name="Brasileirão Série B 2026",
             description="Protótipo com 20 clubes. Escudos: https://www.footylogos.com/",
-            version="0.1.0", formatVersion=1, gameMinVersion="0.3.0", baseYear=2026,
+            version="0.2.0", formatVersion=1, gameMinVersion="0.3.0", baseYear=2026,
             packageType="database", defaultActiveRegions=[], defaultActiveCompetitions=[league]),
         "teams/teams.json": dict(schema="team",items=teams),
         "competitions/serie-b.json": dict(schema="competition", id=league, name="Brasileirão Série B",
