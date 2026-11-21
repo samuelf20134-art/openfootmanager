@@ -336,6 +336,7 @@ pub fn run() {
             get_season_awards,
             get_followed_division,
             get_hall_of_fame_legends,
+            get_archived_title_winners,
             get_hall_of_fame_champions,
             get_retired_player,
             resolve_message_action,

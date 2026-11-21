@@ -58,6 +58,21 @@ pub fn get_retired_player(
     get_retired_player_internal(&state, &player_id)
 }
 
+/// Compact trophy ledger for the active career; fixture reports stay on the backend.
+#[tauri::command]
+pub fn get_archived_title_winners(
+    state: State<'_, Arc<StateManager>>,
+) -> Result<Vec<(String, u32, String)>, String> {
+    state
+        .get_game(|game| {
+            game.edition_archive
+                .iter()
+                .map(|edition| (edition.competition_id.clone(), edition.season, edition.champion_id.clone()))
+                .collect()
+        })
+        .ok_or_else(|| NO_ACTIVE_GAME.to_string())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
