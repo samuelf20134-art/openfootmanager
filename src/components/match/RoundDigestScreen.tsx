@@ -160,6 +160,11 @@ export default function RoundDigestScreen({
     ? userStanding.previous_position - userStanding.current_position
     : 0;
 
+  // Keep the manager's immediate rivals in view, including at the foot of the table.
+  const table = roundSummary?.standings_delta ?? [];
+  const clubIndex = table.findIndex((entry) => entry.team_id === userTeamId);
+  const firstRow = Math.max(0, Math.min(clubIndex - 2, table.length - 6));
+
   const leagueName = gameState.league
     ? localizeCompetitionName(gameState.league.name, gameState.competitions, t, gameState.league.id)
     : undefined;
@@ -221,7 +226,7 @@ export default function RoundDigestScreen({
           {t("tournaments.leagueTable")}
         </h3>
         <div className="flex flex-col gap-1.5">
-          {roundSummary.standings_delta.slice(0, 6).map((entry) => {
+          {table.slice(firstRow, firstRow + 6).map((entry) => {
             const change = entry.previous_position - entry.current_position;
             const isUserTeam = entry.team_id === userTeamId;
             return (
