@@ -1,3 +1,4 @@
+import HistoricalRanking from "./HistoricalRanking";
 import { Globe, Medal, Trophy, UserRound } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ReactNode } from "react";
@@ -58,6 +59,8 @@ export default function HallOfFameWorldTab({
           </div>
         </CardBody>
       </Card>
+
+      <HistoricalRanking game={gameState} />
 
       {worldCupChampions.length > 0 && (
         <section className="space-y-4">
